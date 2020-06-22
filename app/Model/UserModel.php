@@ -4,7 +4,7 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class IndexModel extends Model
+class UserModel extends Model
 {
     protected $table = 'p_users';
     protected $primaryKey = 'user_id';

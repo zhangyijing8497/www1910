@@ -29,8 +29,8 @@
             <tr>
                 <td><input type="submit" value="注册"></td>
             </tr>
-        </form>
         </table>
+        </form>
     </center>
 </body>
 </html>

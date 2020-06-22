@@ -9,9 +9,19 @@
     <center>
         <h1>登陆</h1>
         <form action="{{url('/user/login')}}" method="post">
-            用 户 名 : <input type="text" name="user_name"><br>
-            密    码 : <input type="password" name="password"><br>
-            <input type="submit" value="登陆">
+            <table>
+                <tr>
+                    <td>用户名</td>
+                    <td><input type="text" name="u" placeholder="用户名\邮箱"></td>
+                </tr>
+                <tr>
+                    <td>密码</td>
+                    <td><input type="password" name="password" placeholder="密码"></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="登陆"></td>
+                </tr>
+            </table>
         </form>
     </center>
 </body>
