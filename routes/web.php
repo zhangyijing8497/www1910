@@ -19,5 +19,5 @@ Route::get('/user/reg','User\IndexController@reg'); //注册
 Route::post('/user/reg','User\IndexController@regDo'); 
 Route::get('/user/login','User\IndexController@login'); //登陆
 Route::post('/user/login','User\IndexController@loginDo'); 
-Route::post('/user/center','User\IndexController@center'); //个人中心
+Route::get('/user/center','User\IndexController@center'); //个人中心
 

@@ -94,7 +94,12 @@ class IndexController extends Controller
             echo "<script>alert('密码不正确,请重新输入..'); window.history.back(-1); </script>";
             die;
         }
-
+        UserModel::where(['user_name'=>$u])->update(array(
+            'last_login'=>time(),
+            'last_ip'   =>$_SERVER['REMOTE_ADDR']
+        ));
+        setcookie('uid',$res->user_id,time()+3600,'/');
+        setcookie('name',$res->user_name,time()+3600,'/');
         echo "<script>alert('登陆成功,正在跳转至个人中心');location='/user/center'</script>";
 
     }
@@ -104,6 +109,14 @@ class IndexController extends Controller
      */
     public function center()
     {
-        
+        // echo '<pre>';print_r($_COOKIE);echo '</pre>';
+        $uid = $_COOKIE['uid'];
+        $u = UserModel::where(['user_id'=>$uid])->first();
+
+        if(isset($_COOKIE['uid']) && isset($_COOKIE['name'])){
+            return view('user.center',['u'=>$u]);
+        }else{
+            echo "<script>alert('请先登录!!!');location='/user/login'</script>";
+        }        
     }
 }
