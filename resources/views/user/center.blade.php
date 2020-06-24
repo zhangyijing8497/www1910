@@ -8,7 +8,7 @@
 <body>
     <center>
         <h2>个人中心</h2>
-        欢迎<span style="color:red">{{$_COOKIE['name']}}</span>回来<br>
+        欢迎<span style="color:red">{{$u['user_name']}}</span>回来<br>
         <table>
             <tr>
                 <td>用户名</td>
