@@ -7,6 +7,7 @@ use App\Model\UserModel;
 use App\Model\TokenModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Redis;
 
 class UserController extends Controller
 {
@@ -125,25 +126,29 @@ class UserController extends Controller
                 'last_ip'   =>$_SERVER['REMOTE_ADDR']
             ));
            //生成token
-           $str = $res->user_id . $res->user_name . time();
-           $token = substr(md5($str),10,16);
-           $data = [
-               'uid'    => $res->user_id,
-               'token'  => $token
-           ];
-           TokenModel::insertGetId($data);
-           $response = [
-            'errno'     => 0,
-            'msg'       => 'ok',
-            'token'     => $token
-           ];
-           return $response;
-        }else{
+            $str = $res->user_id . $res->user_name . time();
+            $token = substr(md5($str),10,16);
+            // $data = [
+            //     'uid'    => $res->user_id,
+            //     'token'  => $token
+            // ];
+            //TokenModel::insertGetId($data); //将data保存在数据库
+            //将token保存在redis中
+            Redis::set($token,$res->user_id);
+            Redis::expire($token,20);
+
             $response = [
-                'errno'     => 50010,
-                'msg'       => '用户名与密码不一致'
+                'errno'     => 0,
+                'msg'       => 'ok',
+                'token'     => $token
             ];
             return $response;
+        }else{
+                $response = [
+                    'errno'     => 50010,
+                    'msg'       => '用户名与密码不一致'
+                ];
+                return $response;
         } 
     }
 
@@ -153,10 +158,11 @@ class UserController extends Controller
     public function center()
     {
         $token = $_GET['token'];
-        $res = TokenModel::where(['token'=>$token])->first();
+        // $res = TokenModel::where(['token'=>$token])->first();
         //    dd($res);
-        if($res){
-            $uid = $res->uid;
+        $uid = Redis::get($token);
+        if($uid){
+            // $uid = $res->uid;
             $userInfo = UserModel::find($uid);
             echo "欢迎".$userInfo->user_name."来到个人中心";
         }else{
