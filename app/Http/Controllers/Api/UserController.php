@@ -135,7 +135,7 @@ class UserController extends Controller
             //TokenModel::insertGetId($data); //将data保存在数据库
             //将token保存在redis中
             Redis::set($token,$res->user_id);
-            Redis::expire($token,20);
+            Redis::expire($token,60);
 
             $response = [
                 'errno'     => 0,
@@ -144,11 +144,11 @@ class UserController extends Controller
             ];
             return $response;
         }else{
-                $response = [
-                    'errno'     => 50010,
-                    'msg'       => '用户名与密码不一致'
-                ];
-                return $response;
+            $response = [
+                'errno'     => 50010,
+                'msg'       => '用户名与密码不一致'
+            ];
+            return $response;
         } 
     }
 
@@ -157,16 +157,116 @@ class UserController extends Controller
      */
     public function center()
     {
-        $token = $_GET['token'];
+        // 鉴权
+        if(isset($_GET['token'])){
+            $token = $_GET['token'];
+        }else{
+            $response = [
+                'errno'     => 50011,
+                'msg'       => '请先登录'
+            ];
+            return $response;
+        }
         // $res = TokenModel::where(['token'=>$token])->first();
         //    dd($res);
         $uid = Redis::get($token);
         if($uid){
             // $uid = $res->uid;
             $userInfo = UserModel::find($uid);
-            echo "欢迎".$userInfo->user_name."来到个人中心";
+            $response = [
+                'errno'     => 0,
+                'msg'       => '欢迎'.$userInfo->user_name.'来到个人中心'
+            ];
+            return $response;
         }else{
-            echo "请先登陆!!";
+            $response = [
+                'errno'     => 50013,
+                'msg'       => '请先登录'
+            ];
+            return $response;
         }
+    }
+
+    /**
+     * 我的订单
+     */
+    public function orders()
+    {
+        // 鉴权
+        if(isset($_GET['token'])){
+            $token = $_GET['token'];
+            $uid = Redis::get($token);
+            if($uid){
+
+            }else{
+                $response = [
+                    'errno'     => 50014,
+                    'msg'       => '请先登录'
+                ];
+                return $response;
+            }
+        }else{
+            $response = [
+                'errno'     => 50015,
+                'msg'       => '请先登录'
+            ];
+            return $response;
+        }
+
+        $arr = [
+            '2020040545919',
+            '2020012540913',
+            '2020021540389',
+            '2020042451298',
+            '2020071342864',
+        ];
+        $response = [
+            'errno'     => 0,
+            'msg'       => 'ok',
+            'data'      => [
+                'orders'    => $arr
+            ]
+        ];
+        return $response;
+    }
+
+    /**
+     * 购物车
+     */
+    public function cart()
+    {
+        // 鉴权
+        if(isset($_GET['token'])){
+            $token = $_GET['token'];
+            $uid = Redis::get($token);
+            if($uid){
+
+            }else{
+                $response = [
+                    'errno'     => 50016,
+                    'msg'       => '请先登录'
+                ];
+                return $response;
+            }
+        }else{
+            $response = [
+                'errno'     => 50017,
+                'msg'       => '请先登录'
+            ];
+            return $response;
+        }
+        $goods = [
+            123,
+            456,
+            789
+        ];
+        $response = [
+            'errno'     => 0,
+            'msg'       => 'ok',
+            'data'      => [
+                'goods'    => $goods
+            ]
+        ];
+        return $response;
     }
 }

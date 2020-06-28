@@ -25,4 +25,6 @@ Route::get('/user/center','User\IndexController@center'); //个人中心
 Route::post('/api/user/reg','Api\UserController@reg'); //注册
 Route::post('/api/user/login','Api\UserController@login'); //登陆
 Route::get('/api/user/center','Api\UserController@center'); //个人中心
+Route::get('/api/my/orders','Api\UserController@orders'); //订单
+Route::get('/api/my/cart','Api\UserController@cart'); //购物车
 
