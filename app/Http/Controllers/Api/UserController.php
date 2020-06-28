@@ -155,21 +155,12 @@ class UserController extends Controller
     /**
      * 个人中心
      */
-    public function center()
+    public function center(Request $request)
     {
-        // 鉴权
-        if(isset($_GET['token'])){
-            $token = $_GET['token'];
-        }else{
-            $response = [
-                'errno'     => 50011,
-                'msg'       => '请先登录'
-            ];
-            return $response;
-        }
+        $token = $request->input('token');
+        $uid = Redis::get($token);
         // $res = TokenModel::where(['token'=>$token])->first();
         //    dd($res);
-        $uid = Redis::get($token);
         if($uid){
             // $uid = $res->uid;
             $userInfo = UserModel::find($uid);
@@ -180,7 +171,7 @@ class UserController extends Controller
             return $response;
         }else{
             $response = [
-                'errno'     => 50013,
+                'errno'     => 50011,
                 'msg'       => '请先登录'
             ];
             return $response;
@@ -192,27 +183,6 @@ class UserController extends Controller
      */
     public function orders()
     {
-        // 鉴权
-        if(isset($_GET['token'])){
-            $token = $_GET['token'];
-            $uid = Redis::get($token);
-            if($uid){
-
-            }else{
-                $response = [
-                    'errno'     => 50014,
-                    'msg'       => '请先登录'
-                ];
-                return $response;
-            }
-        }else{
-            $response = [
-                'errno'     => 50015,
-                'msg'       => '请先登录'
-            ];
-            return $response;
-        }
-
         $arr = [
             '2020040545919',
             '2020012540913',
@@ -235,26 +205,6 @@ class UserController extends Controller
      */
     public function cart()
     {
-        // 鉴权
-        if(isset($_GET['token'])){
-            $token = $_GET['token'];
-            $uid = Redis::get($token);
-            if($uid){
-
-            }else{
-                $response = [
-                    'errno'     => 50016,
-                    'msg'       => '请先登录'
-                ];
-                return $response;
-            }
-        }else{
-            $response = [
-                'errno'     => 50017,
-                'msg'       => '请先登录'
-            ];
-            return $response;
-        }
         $goods = [
             123,
             456,
