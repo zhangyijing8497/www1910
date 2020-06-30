@@ -40,3 +40,11 @@ Route::prefix('/api/')->middleware('check.pri','access.filter')->group(function(
     Route::get('y','Api\TestController@y'); 
     Route::get('z','Api\TestController@z'); 
 });
+
+
+Route::get('/test/sign1','TestController@sign1');
+Route::get('/test/www','TestController@www');
+Route::get('/test/send-data','TestController@sendData');
+Route::get('/test/post-data','TestController@postData');
+Route::get('/test/encrypt1','TestController@encrypt1');//对称加密
+Route::get('/secret','TestController@secret');
