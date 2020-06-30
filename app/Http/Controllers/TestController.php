@@ -106,6 +106,9 @@ class TestController extends Controller
         echo $response;
     }
 
+    /**
+     * 对称加密
+     */
     public function encrypt1()
     {
         $data = '好久不见';
@@ -127,6 +130,50 @@ class TestController extends Controller
 
         // 使用curl post数据数据
         $url = 'http://api.1910.com/test/decrypt1';
+
+        // 1 实例化
+        $ch = curl_init();
+        // 2 配置参数
+        curl_setopt($ch,CURLOPT_URL,$url);
+        curl_setopt($ch,CURLOPT_POST,1);
+        curl_setopt($ch,CURLOPT_POSTFIELDS,$post_data);
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+
+        // 3 开启会议
+        $response = curl_exec($ch);
+
+        // 4 检测错误
+        $errno = $err = curl_errno($ch);
+        $errmsg = curl_errno($ch);
+
+        if($errno){
+            var_dump($errmsg);
+            die;
+        }
+        curl_close($ch);
+        echo $response;
+    }
+
+    /**
+     * 非对称加密
+     */
+    public function rsaEncrypt1()
+    {
+        $data = '左手握大地,右手握着天';
+
+
+        // 使用公钥加密
+        $key_content = file_get_contents(storage_path('keys/pub.key'));
+        $pub_key = openssl_get_publickey($key_content);
+        openssl_public_encrypt($data,$enc_data,$pub_key);
+        echo "加密后:" . $enc_data;echo "</br>";
+
+        $post_data = [
+            'data'  => $enc_data,
+        ];
+
+        // 使用curl post数据数据
+        $url = 'http://api.1910.com/rsa/decrypt1';
 
         // 1 实例化
         $ch = curl_init();

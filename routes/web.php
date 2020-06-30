@@ -47,4 +47,5 @@ Route::get('/test/www','TestController@www');
 Route::get('/test/send-data','TestController@sendData');
 Route::get('/test/post-data','TestController@postData');
 Route::get('/test/encrypt1','TestController@encrypt1');//对称加密
+Route::get('/rsa/encrypt1','TestController@rsaEncrypt1');//非对称加密
 Route::get('/secret','TestController@secret');
