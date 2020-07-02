@@ -229,4 +229,21 @@ class TestController extends Controller
         echo $dec_data;
 
     }
+
+    public function rsaSign1()
+    {
+        $data = '左手拈着花,右手舞者剑';
+        $key = openssl_get_privatekey(file_get_contents(storage_path('keys/a_priv.key')));
+        openssl_sign($data,$sign,$key);
+        // echo $sign;
+        $sign_str = urlencode(base64_encode($sign));
+
+        // 将数据 签名一起发送
+        $url = 'http://api.1910.com/rsa/verify1?data='.$data.'&sign='.$sign_str;
+        // echo $url;
+
+        $response = file_get_contents($url);
+        echo $response;
+
+    }
 }
